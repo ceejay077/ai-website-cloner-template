@@ -1,20 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import { PageTransitions } from "@/components/sites/showlanka/PageTransitions";
+
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "@/components/sites/showlanka/showlanka.css";
 
 export const metadata: Metadata = {
-  title: "Website Clone",
-  description: "Pixel-perfect website clone",
+  title: "Tour Operators Sri Lanka - Show Lanka Tours | Best Tour Packages",
+  description:
+    "Show Lanka Tours: Top Tour Operators Sri Lanka. Experience customized tour packages, private guides, and exceptional service. Embark on a Sri Lankan adventure with us.",
+  openGraph: {
+    locale: "en_US",
+    siteName: "Sri Lanka tour operators | Show Lanka tours -",
+    type: "website",
+    title: "Discover Sri Lanka with Top Tour Operators - Show Lanka Tours",
+    description:
+      "Embark on an unforgettable journey through Sri Lanka with Show Lanka Tours. As leading tour operators, we offer customized packages, private guides, and exceptional service tailored to your travel",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Discover Sri Lanka with Top Tour Operators - Show Lanka Tours",
+    description:
+      "Embark on an unforgettable journey through Sri Lanka with Show Lanka Tours. As leading tour operators, we offer customized packages, private guides, and exceptional service tailored to your travel",
+  },
 };
 
 export default function RootLayout({
@@ -23,11 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en-US" dir="ltr">
+      <body className="sl-body">
+        <PageTransitions />
+        {children}
+      </body>
     </html>
   );
 }
