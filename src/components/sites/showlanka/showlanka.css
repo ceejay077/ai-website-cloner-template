@@ -1190,11 +1190,11 @@ body.sl-body.page-exit.page-exit-active {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   overflow: hidden;
-  max-height: 87px;
+  height: 87px;
 }
 .ti-widget .ti-review-text.is-open {
   -webkit-line-clamp: unset;
-  max-height: none;
+  height: auto;
 }
 .ti-widget .ti-read-more {
   display: block;
