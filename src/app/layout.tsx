@@ -25,6 +25,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      // Page scripts may tag <html> before hydration (e.g. the showlanka preloader).
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
