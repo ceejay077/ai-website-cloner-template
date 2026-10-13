@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PagePreloader } from "@/components/sites/showlanka/PagePreloader";
 import { SiteFooter } from "@/components/sites/showlanka/SiteFooter";
 import { SiteHeader } from "@/components/sites/showlanka/SiteHeader";
+import { SiteShell } from "@/components/sites/showlanka/SiteShell";
 import "./globals.css";
 import "@/components/sites/showlanka/showlanka.css";
 
@@ -24,10 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <body className="sl-body flex min-h-full flex-col" suppressHydrationWarning>
-        <PagePreloader />
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <SiteShell preloader={<PagePreloader />} header={<SiteHeader />} footer={<SiteFooter />}>
+          {children}
+        </SiteShell>
       </body>
     </html>
   );

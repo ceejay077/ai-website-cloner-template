@@ -1,39 +1,72 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { pageMetadata, SubPage } from "@/components/sites/showlanka/SubPage";
-import { decodeEntities, featuredImage, getPostsByCategory, stripTags } from "@/lib/wp";
+import { notFound } from "next/navigation";
+import { pageHeadings } from "@/components/sites/showlanka/config";
+import { PageBanner } from "@/components/sites/showlanka/PageBanner";
+import { getNewsListing, getPage, type NewsItem } from "@/lib/wp";
 
-export const generateMetadata = () => pageMetadata("news-offers");
+// SEO title/description set in the live site's SEO plugin, which the REST API omits.
+const TITLE = "Budget tour operators - Latest Sri Lanka Tourism News";
+const DESCRIPTION =
+  "Stay updated with the latest news and updates on Sri Lanka tourism. Discover new travel trends, government policies, and industry insights with Show Lanka Tours.";
+
+export const metadata: Metadata = {
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  alternates: { canonical: "/news-offers/" },
+};
 
 export default async function NewsPage() {
-  const news = await getPostsByCategory("news", "desc");
+  const [page, news] = await Promise.all([getPage("news-offers"), getNewsListing()]);
+  if (!page) notFound();
+  const headings = pageHeadings["news-offers"];
+
   return (
-    <SubPage slug="news-offers">
-      <section className="sl-container" style={{ display: "grid", gap: 16, padding: "0 12px 48px" }}>
-        {news.map((post) => {
-          const image = featuredImage(post, "medium_large");
-          const title = decodeEntities(post.title.rendered);
-          return (
-            <article key={post.id} className="sl-listing" style={{ boxShadow: "none" }}>
-              <div className="sl-listing__img">
-                {image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={image.source_url} alt={image.alt_text || title} loading="lazy" />
-                )}
-              </div>
-              <div className="sl-listing__text">
-                <h3>{title}</h3>
-                <p>
-                  {new Date(post.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
-                </p>
-                <p>{stripTags(post.excerpt.rendered).replace(/\s*Read More$/, "")}</p>
-                <Link href={`/${post.slug}`} className="sl-btn">
-                  Read More<span className="sr-only"> about {title}</span>
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+    <>
+      <PageBanner entry={page} title={headings.title} subtitle={headings.subtitle} className="sl-banner--natural" />
+      <section className="sl-tours-intro">
+        <div className="sl-tours-container">
+          <h2 className="sl-subpage-title">{headings.intro}</h2>
+        </div>
       </section>
-    </SubPage>
+      <section className="sl-news">
+        <div className="sl-tours-container">
+          <div className="sl-news__grid">
+            {news.map((item) => (
+              <NewsRow key={item.slug} item={item} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function NewsRow({ item }: { item: NewsItem }) {
+  return (
+    <article className="sl-news__item">
+      <div
+        className="sl-news__img"
+        role="img"
+        aria-label={item.title}
+        style={item.image ? { backgroundImage: `url("${item.image}")` } : undefined}
+      >
+        {item.hasVideo && (
+          <Link href={`/${item.slug}#video-player`} className="sl-news__play" aria-label={`Watch video: ${item.title}`}>
+            <span>
+              <svg viewBox="0 0 384 512" aria-hidden>
+                <path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
+              </svg>
+            </span>
+          </Link>
+        )}
+      </div>
+      <div className="sl-news__text">
+        <h3>
+          <Link href={`/${item.slug}`}>{item.title}</Link>
+        </h3>
+        <p>{item.date}</p>
+      </div>
+    </article>
   );
 }

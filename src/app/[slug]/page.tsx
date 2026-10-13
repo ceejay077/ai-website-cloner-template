@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { NewsPost } from "@/components/sites/showlanka/NewsPost";
 import { PageBanner } from "@/components/sites/showlanka/PageBanner";
+import { TourPost } from "@/components/sites/showlanka/TourPost";
 import { WpHtml } from "@/components/sites/showlanka/WpHtml";
-import { decodeEntities, getAllPostSlugs, getPost, stripTags } from "@/lib/wp";
+import { decodeEntities, getAllPostSlugs, getPost, isNewsPost, isTourPost, stripTags } from "@/lib/wp";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -16,17 +18,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return {
-    title: decodeEntities(post.title.rendered),
-    description: stripTags(post.excerpt.rendered).replace(/\s*Read More$/, "").slice(0, 160),
-    alternates: { canonical: `/${slug}/` },
-  };
+  const title = decodeEntities(post.title.rendered);
+  const description = stripTags(post.excerpt.rendered).replace(/\s*Read More$/, "").slice(0, 160);
+  if ((await isTourPost(post)) || (await isNewsPost(post))) {
+    // Tour and news pages use the SEO plugin's "{title} - {site name}" pattern and the whole excerpt.
+    return {
+      title: { absolute: `${title} - Sri Lanka tour operators | Show Lanka tours` },
+      description: stripTags(post.excerpt.rendered).replace(/\s*Read More$/, "").replace(/…$/, ""),
+      alternates: { canonical: `/${slug}/` },
+      openGraph: { type: "article" },
+    };
+  }
+  return { title, description, alternates: { canonical: `/${slug}/` } };
 }
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+  if (await isTourPost(post)) return <TourPost post={post} />;
+  if (await isNewsPost(post)) return <NewsPost post={post} />;
   return (
     <>
       <PageBanner entry={post} />

@@ -9,17 +9,19 @@ export function PageBanner({
   showText = true,
   title,
   subtitle,
+  className,
 }: {
   entry: WpEntry;
   showText?: boolean;
   title?: string;
   subtitle?: string;
+  className?: string;
 }) {
   const image = featuredImage(entry);
   const heading = title ?? decodeEntities(entry.title.rendered);
   const sub = subtitle ?? stripTags(entry.excerpt.rendered).replace(/\s*Read More$/, "");
   return (
-    <section className="sl-banner">
+    <section className={className ? `sl-banner ${className}` : "sl-banner"}>
       {image && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={image.source_url} alt={image.alt_text || ""} fetchPriority="high" />

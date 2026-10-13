@@ -145,15 +145,36 @@ export interface TourMeta {
   excerpt: string;
 }
 
-export async function getTourListing(): Promise<TourMeta[]> {
+export interface TourCategory {
+  key: string;
+  label: string;
+}
+
+/** The listing's category dropdown, built by the theme from tour subcategories. */
+export interface TourListingData {
+  tours: TourMeta[];
+  categories: TourCategory[];
+}
+
+export async function getTourListing(): Promise<TourListingData> {
   const res = await fetch(`${WP_ORIGIN}/sri-lanka-tours/`, {
     next: { revalidate: REVALIDATE_SECONDS },
   });
-  if (!res.ok) return [];
+  if (!res.ok) return { tours: [], categories: [] };
   const html = await res.text();
-  const blocks = html.split('class="col-lg-6 col-12 package-list-container ').slice(1);
+  const select = html.match(/<select id="subcategory-filter"[\s\S]*?<\/select>/)?.[0] ?? "";
+  const categories = [...select.matchAll(/<option value="([^"]+)">([^<]*)<\/option>/g)].map((m) => ({
+    key: m[1],
+    label: decodeEntities(m[2].trim()),
+  }));
+  return { tours: parseTourCards(html), categories };
+}
+
+// Tour cards as the theme renders them on the listing and in "Similar Tour Packages".
+function parseTourCards(html: string): TourMeta[] {
+  const blocks = html.split('class="col-lg-6 col-12 package-list-container').slice(1);
   return blocks.map((block) => {
-    const classes = block.slice(0, block.indexOf('"')).split(/\s+/);
+    const classes = block.slice(0, block.indexOf('"')).trim().split(/\s+/);
     const daysClass = classes.find((c) => c.startsWith("days-"));
     const months = JSON.parse(block.match(/data-attr-months="([^"]*)"/)?.[1] ?? "[]") as number[];
     const values = [...block.matchAll(/<span class="value">([^<]*)<\/span>/g)].map((m) => m[1]);
@@ -162,7 +183,7 @@ export async function getTourListing(): Promise<TourMeta[]> {
       slug: href.replace(WP_ORIGIN, "").replace(/^\/|\/$/g, ""),
       title: decodeEntities(block.match(/<h3>([\s\S]*?)<\/h3>/)?.[1].trim() ?? ""),
       image: decodeEntities(block.match(/data-bg-image="url\(([^)]*)\)"/)?.[1] ?? "").replace(/'/g, ""),
-      days: daysClass ? Number(daysClass.slice(5)) : 0,
+      days: daysClass ? Number(daysClass.slice(5)) : Number.parseInt(values[0] ?? "", 10) || 0,
       duration: values[0] ?? "",
       price: values[1] ?? "",
       months,
@@ -170,4 +191,149 @@ export async function getTourListing(): Promise<TourMeta[]> {
       excerpt: stripTags((block.match(/<p>([\s\S]*?)<\/p>/)?.[1] ?? "").replace(/<a[\s\S]*<\/a>/, "")),
     };
   });
+}
+
+/** Image URLs from the first post's gallery in a category (e.g. the coupon popup). */
+export async function getGalleryImages(category: string): Promise<string[]> {
+  const [post] = await getPostsByCategory(category);
+  if (!post) return [];
+  // The lazy-load plugin may swap `src` for a placeholder and keep the real URL in data-src.
+  return [...post.content.rendered.matchAll(/<img[^>]*>/g)]
+    .map(([tag]) => (tag.match(/\sdata-src="([^"]+)"/) ?? tag.match(/\ssrc="([^"]+)"/))?.[1] ?? "")
+    .filter((src) => src && !src.startsWith("data:"));
+}
+
+// --- Tour detail page ------------------------------------------------------
+// The single-tour template adds theme fields (tour code, per-pax pricing,
+// discount, route coordinates, similar tours) that the REST API omits, so
+// they are read from the live post page.
+
+export interface TourPrice {
+  old: string;
+  current: string;
+  save: string;
+  /** Raw per-person amount the price calculator multiplies. */
+  amount: number;
+}
+
+export interface TourDetail {
+  code: string;
+  duration: string;
+  /** Prices for 1, 2 and 3 travellers, in that order. */
+  prices: TourPrice[];
+  discount: string;
+  /** Ordered route stops; the theme draws a closed loop through them. */
+  locations: { name: string; position: [number, number] }[];
+  similar: TourMeta[];
+}
+
+/** Category slug the theme files every tour package under. */
+export const TOUR_CATEGORY = "packages";
+
+export async function isTourPost(post: WpEntry): Promise<boolean> {
+  const cats = await getCategories();
+  const tourCat = cats.find((c) => c.slug === TOUR_CATEGORY);
+  return Boolean(tourCat && post.categories?.includes(tourCat.id));
+}
+
+const clean = (text: string) => decodeEntities(text.replace(/\s+/g, " ").trim());
+
+export async function getTourDetail(slug: string): Promise<TourDetail | null> {
+  const res = await fetch(`${WP_ORIGIN}/${encodeURIComponent(slug)}/`, {
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
+  if (!res.ok) return null;
+  const html = await res.text();
+  const details = html.slice(html.indexOf('class="flex flex-col tour-details-container"'), html.indexOf('class="detail-inner"'));
+  if (!details) return null;
+
+  const amounts = html.match(/data-attr-initVal="([^"]*)"\s*data-attr-2pax="([^"]*)"\s*data-attr-3pax="([^"]*)"/)?.slice(1) ?? [];
+  const prices = [1, 2, 3].map((pax, i) => {
+    const display = details.match(
+      new RegExp(`price-display ${pax}pax[^"]*">\\s*<span class="old-price">([^<]*)</span>\\s*<span>([^<]*)</span>`),
+    );
+    return {
+      old: clean(display?.[1] ?? ""),
+      current: clean(display?.[2] ?? ""),
+      save: clean(details.match(new RegExp(`<span class="save ${pax}pax[^"]*">([^<]*)</span>`))?.[1] ?? "0"),
+      amount: Number.parseFloat(amounts[i] ?? "0") || 0,
+    };
+  });
+
+  const mapJson = html.match(/mapData = (\{[\s\S]*?\});/)?.[1];
+  const raw = mapJson ? (JSON.parse(mapJson) as { locations?: Record<string, [number, number]> }).locations : undefined;
+  const locations = Object.entries(raw ?? {}).map(([key, position]) => {
+    const name = key.replace(/_/g, " ");
+    return { name: name.charAt(0).toUpperCase() + name.slice(1), position };
+  });
+
+  const similarStart = html.indexOf('class="packages-list similar-post-container"');
+  const similarEnd = html.indexOf("</section>", similarStart);
+
+  return {
+    code: clean(html.match(/<span>Tour code: ([^<]*)<\/span>/)?.[1] ?? ""),
+    duration: clean(details.match(/<span class="label">Duration<\/span>\s*<span class="value">([^<]*)<\/span>/)?.[1] ?? ""),
+    prices,
+    discount: clean(details.match(/discount-rate[\s\S]*?<span class="value">([^<]*)<\/span>/)?.[1] ?? ""),
+    locations,
+    similar: similarStart < 0 ? [] : parseTourCards(html.slice(similarStart, similarEnd)),
+  };
+}
+
+/** Image URLs from a post's own galleries (the tour hero cycles through these). */
+export function contentImages(html: string): string[] {
+  return [...html.matchAll(/<figure class="wp-block-image[\s\S]*?<img[^>]*>/g)]
+    .map(([tag]) => (tag.match(/\sdata-src="([^"]+)"/) ?? tag.match(/\ssrc="([^"]+)"/))?.[1] ?? "")
+    .filter((src) => src && !src.startsWith("data:"));
+}
+
+// --- News ------------------------------------------------------------------
+// The news list and each article's video come from theme fields the REST API
+// omits, so they are read from the live pages like the tour data above.
+
+export interface NewsItem {
+  slug: string;
+  title: string;
+  /** Empty for video posts the theme lists without a thumbnail. */
+  image: string;
+  date: string;
+  hasVideo: boolean;
+}
+
+export const NEWS_CATEGORY = "news";
+
+export async function isNewsPost(post: WpEntry): Promise<boolean> {
+  const cats = await getCategories();
+  const news = cats.find((c) => c.slug === NEWS_CATEGORY);
+  return Boolean(news && post.categories?.includes(news.id));
+}
+
+export async function getNewsListing(): Promise<NewsItem[]> {
+  const res = await fetch(`${WP_ORIGIN}/news-offers/`, { next: { revalidate: REVALIDATE_SECONDS } });
+  if (!res.ok) return [];
+  const html = await res.text();
+  return html
+    .split('class="col-lg-6 col-12 news-list-container"')
+    .slice(1)
+    .map((block) => {
+      const href = block.match(/<h3>\s*<a href="([^"]+)"/)?.[1] ?? "";
+      const image = block.match(/data-bg-image="url\(([^)]*)\)"/)?.[1] ?? block.match(/style="background-image: url\(([^)]*)\);"/)?.[1] ?? "";
+      return {
+        slug: href.replace(WP_ORIGIN, "").replace(/^\/|\/$/g, ""),
+        title: clean(block.match(/<h3>\s*<a [^>]*>([\s\S]*?)<\/a>/)?.[1] ?? ""),
+        image: decodeEntities(image).replace(/'/g, ""),
+        date: clean(block.match(/<p class="published-date">([\s\S]*?)<\/p>/)?.[1] ?? ""),
+        hasVideo: block.includes("video-thumbnail-news"),
+      };
+    })
+    .filter((item) => item.slug);
+}
+
+/** YouTube embed URL from the theme's video field on a post page, if any. */
+export async function getPostVideo(slug: string): Promise<string | null> {
+  const res = await fetch(`${WP_ORIGIN}/${encodeURIComponent(slug)}/`, { next: { revalidate: REVALIDATE_SECONDS } });
+  if (!res.ok) return null;
+  const html = await res.text();
+  const iframe = html.match(/<div id="video-player"[^>]*>\s*<iframe([^>]*)>/)?.[1] ?? "";
+  return iframe.match(/\sdata-src="([^"]+)"/)?.[1] ?? iframe.match(/\ssrc="(https:[^"]+)"/)?.[1] ?? null;
 }

@@ -75,8 +75,6 @@ export const contact = {
   phones: ["0094 779 144664", "0094 112281729"],
   email: "showlankatours@gmail.com",
   whatsapp: "94779144664",
-  mapEmbed:
-    "https://www.google.com/maps?q=Show+Lanka+Tours+Minuwangoda&output=embed",
   googleReviews: "https://www.google.com/maps?cid=3563717595747314560",
   tripadvisor:
     "https://www.tripadvisor.com/Attraction_Review-g11999643-d13421293-Reviews-Show_Lanka_Tours-Minuwangoda_Western_Province.html",
@@ -142,20 +140,7 @@ export const hero = {
   googleRating: { score: "4.7", count: 37 },
 };
 
-/** Homepage "Tour Packages" tiles: mainpacks post slug → listing filter key. */
-export const tourFilters = [
-  { key: "year", label: "All Year" },
-  { key: "family", label: "Family" },
-  { key: "group", label: "Group wise tours" },
-  { key: "summer", label: "Hot summer" },
-  { key: "popular", label: "Most popular" },
-  { key: "private", label: "Private tours" },
-  { key: "safari", label: "Safari" },
-  { key: "transfers", label: "Transfers" },
-  { key: "winter", label: "Winter" },
-  { key: "day", label: "Day tours" },
-];
-
+/** Tour listing "days" filter; the theme template hard-codes these ranges. */
 export const dayRanges: { label: string; min: number; max: number }[] = [
   { label: "From 1 to 3 days", min: 1, max: 3 },
   { label: "From 4 to 7 days", min: 4, max: 7 },
