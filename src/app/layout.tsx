@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { PagePreloader } from "@/components/sites/showlanka/PagePreloader";
+import { SiteFooter } from "@/components/sites/showlanka/SiteFooter";
+import { SiteHeader } from "@/components/sites/showlanka/SiteHeader";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "@/components/sites/showlanka/showlanka.css";
 
 export const metadata: Metadata = {
-  title: "Website Clone",
-  description: "Pixel-perfect website clone",
+  metadataBase: new URL("https://www.showlanka.com"),
+  title: {
+    default: "Tour Operators Sri Lanka - Show Lanka Tours | Best Tour Packages",
+    template: "%s | Show Lanka Tours",
+  },
+  description: "Custom Sri Lanka holiday packages with expert local guides.",
+  icons: { icon: "https://www.showlanka.com/wp-content/themes/webslankatheme/images/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -22,12 +20,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // PagePreloader's pre-paint script tags <html>, so React must accept that difference.
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className="antialiased" suppressHydrationWarning>
+      <body className="sl-body flex min-h-full flex-col" suppressHydrationWarning>
+        <PagePreloader />
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
