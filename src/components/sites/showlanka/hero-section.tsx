@@ -1,8 +1,9 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { heroImages, heroWords, SOURCE, tourRadarIframe } from "./data";
+import { heroImages, heroWords, tourRadarIframe } from "./data";
 import { DeferredIframe } from "./deferred-iframe";
 import { GoogleGIcon } from "./icons";
 import { TripadvisorBadge } from "./tripadvisor-badge";
@@ -57,9 +58,9 @@ export function HeroSection() {
               Custom Sri Lanka holiday packages with expert local guides — beaches, wildlife, culture &amp; adventure
               in one unforgettable trip.
             </p>
-            <a className="btn common-btn" href={`${SOURCE}/contact/`}>
+            <Link className="btn common-btn" href="/contact">
               Send an Inquiry
-            </a>
+            </Link>
           </div>
           <div className="hero-tourradar-widget">
             <DeferredIframe src={tourRadarIframe} width={240} height={280} scrolling="no" title="TourRadar Reviews" />

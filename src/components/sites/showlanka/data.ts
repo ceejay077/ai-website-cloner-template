@@ -1,16 +1,16 @@
 export const SOURCE = "https://www.showlanka.com";
 export const ASSETS = "/sites/showlanka";
 
-export type NavLink = { label: string; href: string; current?: boolean; external?: boolean };
+export type NavLink = { label: string; href: string; external?: boolean };
 
 // Rendered with flex-direction: row-reverse, so the visual order is reversed.
 export const mainMenu: NavLink[] = [
-  { label: "Contact", href: `${SOURCE}/contact/` },
-  { label: "Travel News", href: `${SOURCE}/news-offers/` },
-  { label: "Tours", href: `${SOURCE}/sri-lanka-tours/` },
-  { label: "Our team & Guides", href: `${SOURCE}/meet-your-travel-gurus/` },
-  { label: "About", href: `${SOURCE}/about/` },
-  { label: "Home", href: "/", current: true },
+  { label: "Contact", href: "/contact" },
+  { label: "Travel News", href: "/news-offers" },
+  { label: "Tours", href: "/sri-lanka-tours" },
+  { label: "Our team & Guides", href: "/meet-your-travel-gurus" },
+  { label: "About", href: "/about" },
+  { label: "Home", href: "/" },
 ];
 
 export const heroImages = [
@@ -124,23 +124,23 @@ export const footerMenus: { label: string; links: NavLink[] }[] = [
     label: "Company",
     links: [
       { label: "Home", href: "/" },
-      { label: "About us", href: `${SOURCE}/about/` },
-      { label: "Inspirational customer talks", href: `${SOURCE}/real-traveler-stories/` },
-      { label: "Help desk", href: `${SOURCE}/about/#our-team` },
-      { label: "Guides", href: `${SOURCE}/meet-your-travel-gurus/#our-guides` },
-      { label: "Ground flow support", href: `${SOURCE}/meet-your-travel-gurus/#ground-support` },
-      { label: "Sweet Bonanza", href: `${SOURCE}/sweet-bonanza/` },
-      { label: "Contact us", href: `${SOURCE}/contact/` },
+      { label: "About us", href: "/about" },
+      { label: "Inspirational customer talks", href: "/real-traveler-stories" },
+      { label: "Help desk", href: "/about#our-team" },
+      { label: "Guides", href: "/meet-your-travel-gurus#our-guides" },
+      { label: "Ground flow support", href: "/meet-your-travel-gurus#ground-support" },
+      { label: "Sweet Bonanza", href: "/sweet-bonanza" },
+      { label: "Contact us", href: "/contact" },
     ],
   },
   {
     label: "Resources",
     links: [
-      { label: "FAQs", href: `${SOURCE}/faqs/` },
-      { label: "Travel News", href: `${SOURCE}/news-offers/` },
-      { label: "Terms and conditions", href: `${SOURCE}/terms-and-conditions/` },
-      { label: "Entrance fee", href: `${SOURCE}/wp-content/uploads/2024/07/Entrance-fee-2024-2.pdf`, external: true },
-      { label: "B2B Business", href: `${SOURCE}/about/#b2b-business` },
+      { label: "FAQs", href: "/faqs" },
+      { label: "Travel News", href: "/news-offers" },
+      { label: "Terms and conditions", href: "/terms-and-conditions" },
+      { label: "Entrance fee", href: `${ASSETS}/uploads/2024/07/Entrance-fee-2024-2.pdf`, external: true },
+      { label: "B2B Business", href: "/about#b2b-business" },
       { label: "Sri Lankan visa", href: "https://www.immigration.gov.lk/pages_e.php?id=61" },
       {
         label: "Travel insurance",
@@ -151,14 +151,14 @@ export const footerMenus: { label: string; links: NavLink[] }[] = [
   {
     label: "Tour categories",
     links: [
-      { label: "Summer tours", href: `${SOURCE}/sri-lanka-tours/?summer` },
-      { label: "Winter tours", href: `${SOURCE}/sri-lanka-tours/?winter` },
-      { label: "Group wise tours", href: `${SOURCE}/sri-lanka-tours/?group` },
-      { label: "Day tours", href: `${SOURCE}/sri-lanka-tours/?day` },
-      { label: "Safari tours", href: `${SOURCE}/sri-lanka-tours/?safari` },
-      { label: "Ramayana Yatra", href: `${SOURCE}/ramayana-yatra/` },
-      { label: "All year adventures", href: `${SOURCE}/sri-lanka-tours/?year` },
-      { label: "Family adventure", href: `${SOURCE}/sri-lanka-tours/?family` },
+      { label: "Summer tours", href: "/sri-lanka-tours?summer" },
+      { label: "Winter tours", href: "/sri-lanka-tours?winter" },
+      { label: "Group wise tours", href: "/sri-lanka-tours?group" },
+      { label: "Day tours", href: "/sri-lanka-tours?day" },
+      { label: "Safari tours", href: "/sri-lanka-tours?safari" },
+      { label: "Ramayana Yatra", href: "/ramayana-yatra" },
+      { label: "All year adventures", href: "/sri-lanka-tours?year" },
+      { label: "Family adventure", href: "/sri-lanka-tours?family" },
     ],
   },
 ];

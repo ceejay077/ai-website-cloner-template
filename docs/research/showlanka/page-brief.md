@@ -23,6 +23,34 @@ Reference screenshots: `docs/design-references/showlanka/`.
 
 Also: first-visit preloader (sessionStorage `slPreloaderShown`, random compass/plane/globe icon), 0.45s body fade-in, header/intro slide-in on load.
 
-## Out of scope
+## Route map (full site, 45 URLs from /sitemap.xml)
 
-All other routes (About, Tours, Contact, …) keep pointing at https://www.showlanka.com/. Third-party TourRadar reviews are embedded via their live iframe; Trustindex and TripAdvisor widgets are rebuilt statically from the rendered markup.
+All routes live in the `src/app/(showlanka)/` route group; its layout renders the shared header, footer and preloader.
+
+| Source | Local | Template |
+| --- | --- | --- |
+| `/` | `/` | `showlanka-home.tsx` |
+| `/sri-lanka-tours/` (+ `?group`, `?winter`, …) | `/sri-lanka-tours` | `tours-list.tsx` (category/days/month filters, Bonanza popup) |
+| 23 tour posts, e.g. `/sri-lanka-express/` | `/[slug]` | `tour-detail.tsx` (+ `tour-map.tsx`, Bonanza popup) |
+| `/news-offers/` | `/news-offers` | news list |
+| 11 news posts | `/[slug]` | `news-detail.tsx` |
+| `/about/`, `/faqs/`, `/terms-and-conditions/`, `/contact/`, `/meet-your-travel-gurus/`, `/real-traveler-stories/`, `/sweet-bonanza/` | same paths | one `page.tsx` each |
+
+Data: `src/components/sites/showlanka/content/` (`tours.ts` generated from the downloaded pages, `news.ts`, `pages.ts`). Images: `public/sites/showlanka/uploads/<yyyy>/<mm>/…`, same paths as `wp-content/uploads`.
+
+## Content handling
+
+- Kept from the source: layout, images, headings, names, prices, tour codes, durations, map routes, itinerary day titles and stop lists, inclusion/exclusion lists, guide/team facts, contact details, video IDs.
+- Not copied word for word: long prose. News posts reprint press articles, so the clone shows a short summary and links to the original post. Tour intros are composed from each tour's data. FAQ answers, Terms clauses and the About/Team text are condensed. 32 itinerary bullets that were full marketing sentences (> 60 chars) were dropped.
+
+## Behaviour notes
+
+- Similar Tour Packages = every tour in the `private` category, in listing order (including the current tour).
+- Sweet Bonanza popup: shown 3s after load on the tour list and tour pages, 3 coupons per view (1 below 768px). It closes on an outside click, the X button or Esc.
+- Brochure PDF: same output settings as the source's html2pdf call (letter, 0.5in margins, JPEG 0.98, scale 2), built with html2canvas-pro + jsPDF because the template's theme colours are `lab()`/`oklch()`.
+- Contact form: same fields and validation; with no WordPress backend, a valid submit opens a pre-filled email to showlankatours@gmail.com.
+- Date inputs: a jQuery UI–style calendar that writes `mm/dd/yyyy`.
+
+## External
+
+The TourRadar reviews and the Google Map are live iframes, and the YouTube videos are live embeds. The Trustindex and TripAdvisor widgets are rebuilt as static copies.

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ASSETS, footerMenus, partnerLogos } from "./data";
 import { AtIcon, FacebookIcon, PhoneIcon, YoutubeIcon } from "./icons";
+import { SiteLink } from "./site-link";
 
 export function SiteFooter() {
   return (
@@ -13,9 +14,9 @@ export function SiteFooter() {
                 <ul className="nav-menu">
                   {menu.links.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} target={link.external ? "_blank" : undefined}>
+                      <SiteLink href={link.href} target={link.external ? "_blank" : undefined}>
                         {link.label}
-                      </a>
+                      </SiteLink>
                     </li>
                   ))}
                 </ul>

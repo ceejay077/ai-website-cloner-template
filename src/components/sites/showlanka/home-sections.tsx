@@ -1,6 +1,6 @@
 "use client";
 
-import { ASSETS, packages, SOURCE } from "./data";
+import { ASSETS, packages } from "./data";
 import { CertificateIcon, HeartIcon, ShieldIcon } from "./icons";
 import { usePageLoaded } from "./use-page-loaded";
 
@@ -59,7 +59,7 @@ export function PackagesSection() {
                 </div>
                 <div className="col-12 text-content">
                   <h3>{pack.title}</h3>
-                  <a target="_blank" rel="noopener" className="post-readmore-link" href={`${SOURCE}/sri-lanka-tours/?${pack.query}`}>
+                  <a target="_blank" rel="noopener" className="post-readmore-link" href={`/sri-lanka-tours?${pack.query}`}>
                     Read More<span className="sr-only"> about {pack.title}</span>
                   </a>
                 </div>

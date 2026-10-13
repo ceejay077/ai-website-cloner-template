@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ASSETS, mainMenu } from "./data";
 import { usePageLoaded } from "./use-page-loaded";
 
 export function SiteHeader() {
   const loaded = usePageLoaded();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,13 +65,16 @@ export function SiteHeader() {
               aria-label="Primary"
             >
               <ul className="nav-menu">
-                {mainMenu.map((item) => (
-                  <li key={item.label} className={item.current ? "current-menu-item" : undefined}>
-                    <a href={item.href} aria-current={item.current ? "page" : undefined}>
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
+                {mainMenu.map((item) => {
+                  const current = item.href === pathname;
+                  return (
+                    <li key={item.label} className={current ? "current-menu-item" : undefined}>
+                      <Link href={item.href} aria-current={current ? "page" : undefined} onClick={() => setMenuOpen(false)}>
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           </div>

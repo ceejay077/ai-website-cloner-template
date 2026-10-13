@@ -36,6 +36,15 @@
   .sl { animation: none; opacity: 1; }
 }
 
+/* Browser-default border/outline colour, as on the source. This replaces the template's
+   oklch() theme colours, which html2canvas (brochure PDF) cannot parse. */
+.sl *,
+.sl *::before,
+.sl *::after {
+  border-color: currentColor;
+  outline-color: currentColor;
+}
+
 /* ---------- Bootstrap reboot (subset) ---------- */
 .sl h1, .sl h2, .sl h3, .sl h4, .sl h5, .sl h6 {
   margin: 0 0 0.5rem;
@@ -54,7 +63,7 @@
   .sl h4 { font-size: 1.5rem; }
 }
 .sl p { margin: 0 0 1rem; }
-.sl ul { margin: 0 0 1rem; padding-left: 2rem; }
+.sl ul { margin: 0 0 1rem; padding-left: 2rem; list-style: disc; }
 .sl blockquote { margin: 0 0 1rem; }
 .sl strong { font-weight: bolder; }
 .sl a { color: rgba(13, 110, 253, 1); text-decoration: underline; }

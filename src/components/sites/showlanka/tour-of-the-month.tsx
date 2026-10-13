@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { ASSETS, SOURCE } from "./data";
+import { ASSETS } from "./data";
 
 const SPEED = 0.6;
 
@@ -42,9 +43,9 @@ export function TourOfTheMonth() {
             This month, we invite you to embark on an unforgettable journey with history, culture, and natural beauty
             intertwine to create an experience like no other
           </p>
-          <a className="common-btn" href={`${SOURCE}/sri-lanka-express/`}>
+          <Link className="common-btn" href="/sri-lanka-express">
             Read More<span className="sr-only"> about Tour of the month</span>
-          </a>
+          </Link>
         </div>
       </article>
     </section>
