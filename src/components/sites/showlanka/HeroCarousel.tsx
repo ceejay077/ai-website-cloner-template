@@ -10,17 +10,19 @@ const WORD_MS = 5000;
 
 export function HeroCarousel() {
   const [slide, setSlide] = useState(0);
-  const [word, setWord] = useState(0);
+  const [wordTicks, setWordTicks] = useState(0);
 
   useEffect(() => {
     const slideTimer = setInterval(() => setSlide((s) => (s + 1) % hero.slides.length), SLIDE_MS);
-    const wordTimer = setInterval(() => setWord((w) => (w + 1) % hero.words.length), WORD_MS);
+    const wordTimer = setInterval(() => setWordTicks((t) => t + 1), WORD_MS);
     return () => {
       clearInterval(slideTimer);
       clearInterval(wordTimer);
     };
   }, []);
 
+  // The theme's first tick re-selects the first phrase, so it stays up for two intervals.
+  const word = Math.max(0, wordTicks - 1) % hero.words.length;
   const prevWord = (word - 1 + hero.words.length) % hero.words.length;
 
   return (
