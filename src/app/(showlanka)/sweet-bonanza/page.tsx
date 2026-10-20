@@ -10,11 +10,21 @@ export default function SweetBonanzaPage() {
     <>
       <SubPageHero hero={bonanzaPage.hero} />
       <section className="flex package-content">
-        <h1 className="sub-page-title border-after">{bonanzaPage.heading}</h1>
-        <p>{bonanzaPage.intro}</p>
+        <div className="container">
+          <h1 className="sub-page-title border-after">{bonanzaPage.heading}</h1>
+          <p>{bonanzaPage.intro}</p>
+        </div>
       </section>
       <section className="bonanza-list">
-        <BonanzaCarousel />
+        <div className="container">
+          <div className="bonanza-content-container">
+            <div className="row">
+              <div className="col-12 bonanza-list-container page-bonanza">
+                <BonanzaCarousel />
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );

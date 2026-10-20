@@ -66,11 +66,12 @@ export const coupons = [
 
 export const bonanzaPage = {
   seoTitle: "Sweet Bonanza - Sri Lanka tour operators | Show Lanka tours",
-  description: "Sweet Bonanza coupons from Show Lanka Tours: bonus vouchers for confirmed private tour bookings.",
+  description:
+    "Unlock amazing travel experiences with our exclusive Sweet Bonanza coupon! These special offers are designed to make your dream vacation more affordable and unforgettable. Don't miss out—redeem your Sweet Bonanza coupon today and start your journey to extraordinary destinations!",
   hero: { image: "2024/05/Lotus_tower-scaled.jpg", alt: "Lotus tower Sri Lanka" } satisfies Hero,
   heading: "Exclusive Sri Lanka Bonanza Deals",
   intro:
-    "Every confirmed private booking earns one or two Sweet Bonanza vouchers worth between $10 and $100, redeemable for selected experiences during your trip. Swipe through the current coupons below.",
+    "Unlock amazing travel experiences with our exclusive Sweet Bonanza coupon! These special offers are designed to make your dream vacation more affordable and unforgettable. Don’t miss out—redeem your Sweet Bonanza coupon today and start your journey to extraordinary destinations!",
 };
 
 export const aboutPage = {
