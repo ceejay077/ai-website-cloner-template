@@ -24,15 +24,18 @@ export async function POST(request: NextRequest) {
   } catch {}
 
   const h = request.headers;
-  recordPageview({
-    path,
-    referrerHost,
-    utmSource: text(body.utm_source),
-    utmMedium: text(body.utm_medium),
-    utmCampaign: text(body.utm_campaign),
-    country: h.get("cf-ipcountry") || h.get("x-vercel-ip-country") || h.get("x-country-code") || "",
-    ua,
-    ip: h.get("cf-connecting-ip") || h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "",
-  });
+  // Analytics is best-effort: no database → drop the pageview.
+  try {
+    recordPageview({
+      path,
+      referrerHost,
+      utmSource: text(body.utm_source),
+      utmMedium: text(body.utm_medium),
+      utmCampaign: text(body.utm_campaign),
+      country: h.get("cf-ipcountry") || h.get("x-vercel-ip-country") || h.get("x-country-code") || "",
+      ua,
+      ip: h.get("cf-connecting-ip") || h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "",
+    });
+  } catch {}
   return new Response(null, { status: 204 });
 }

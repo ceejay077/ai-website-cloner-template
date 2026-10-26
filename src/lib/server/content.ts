@@ -25,8 +25,14 @@ export const RESERVED_SLUGS = new Set([
   "real-traveler-stories", "sites", "sri-lanka-tours", "sweet-bonanza", "terms-and-conditions",
 ]);
 
+/** No database (e.g. serverless hosting without a persistent disk) → built-in content only. */
 function rows(table: "tours" | "news") {
-  return getDb().prepare(`SELECT slug, data, published, created_at, updated_at FROM ${table} ORDER BY created_at DESC`).all() as Row[];
+  try {
+    return getDb().prepare(`SELECT slug, data, published, created_at, updated_at FROM ${table} ORDER BY created_at DESC`).all() as Row[];
+  } catch (err) {
+    console.warn(`[content] database unavailable, using built-in ${table}:`, err);
+    return [];
+  }
 }
 
 /** Built-in items (with admin overrides applied) after the admin-created ones, newest first. */

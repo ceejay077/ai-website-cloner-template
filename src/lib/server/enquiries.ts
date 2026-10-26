@@ -82,7 +82,7 @@ export function deleteEnquiry(id: number) {
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 /** Notification email via Resend, when RESEND_API_KEY and ENQUIRY_EMAIL_FROM are set. */
-export async function sendEnquiryEmail(id: number, e: EnquiryInput) {
+export async function sendEnquiryEmail(id: number | null, e: EnquiryInput) {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.ENQUIRY_EMAIL_FROM;
   const to = process.env.ENQUIRY_EMAIL_TO;
@@ -97,7 +97,7 @@ export async function sendEnquiryEmail(id: number, e: EnquiryInput) {
     .filter(([, v]) => v)
     .map(([k, v]) => `<tr><td><b>${k}</b></td><td>${esc(v)}</td></tr>`)
     .join("")}</table><p style="white-space:pre-wrap">${esc(e.message)}</p>${
-    site ? `<p><a href="${site}/admin/enquiries/${id}">View in admin</a></p>` : ""
+    site && id !== null ? `<p><a href="${site}/admin/enquiries/${id}">View in admin</a></p>` : ""
   }`;
   try {
     const res = await fetch("https://api.resend.com/emails", {

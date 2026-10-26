@@ -41,7 +41,10 @@ export async function POST(request: NextRequest) {
     return Response.json({ ok: false, error: "Too many enquiries from this connection. Please try again later." }, { status: 429 });
   }
 
-  const origin = sessionOrigin(ip, h.get("user-agent") ?? "");
+  let origin = { visitor: null as string | null, source: "", referrer: "", landingPage: "" };
+  try {
+    origin = sessionOrigin(ip, h.get("user-agent") ?? "");
+  } catch {}
   const input: EnquiryInput = {
     name,
     email,
@@ -59,9 +62,15 @@ export async function POST(request: NextRequest) {
     referrer: origin.referrer,
     landing_page: origin.landingPage,
   };
-  const id = createEnquiry(input);
+  // Without a database the enquiry is still emailed, just not stored.
+  let id: number | null = null;
+  try {
+    id = createEnquiry(input);
+  } catch (err) {
+    console.warn("[enquiry] database unavailable, email only:", err);
+  }
   after(async () => {
-    if (await sendEnquiryEmail(id, input)) markEmailSent(id);
+    if ((await sendEnquiryEmail(id, input)) && id !== null) markEmailSent(id);
   });
   return Response.json({ ok: true });
 }
