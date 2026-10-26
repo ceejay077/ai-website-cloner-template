@@ -1,0 +1,4 @@
+[build.environment]
+  # ENQUIRY_EMAIL_TO is the public contact address shown in the site footer,
+  # so secrets scanning would otherwise fail the build on every prerendered page.
+  SECRETS_SCAN_OMIT_KEYS = "ENQUIRY_EMAIL_TO"
