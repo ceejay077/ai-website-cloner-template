@@ -64,31 +64,33 @@ export function HeroSection() {
             </a>
             <HeroEnquiryForm className="hero-enquiry--overlay" />
           </div>
-          <div className="hero-tourradar-widget">
-            <DeferredIframe src={tourRadarIframe} width={240} height={280} scrolling="no" title="TourRadar Reviews" />
+          <div className="hero-bottom">
+            <div className="hero-review-badges">
+              <div className="hero-tripadvisor-widget">
+                <TripadvisorBadge />
+              </div>
+              <a
+                className="hero-google-widget"
+                href="https://www.google.com/maps?cid=3563717595747314560"
+                target="_blank"
+                rel="noopener"
+              >
+                <GoogleGIcon className="hero-google-widget__icon" />
+                <span className="hero-google-widget__text">
+                  <span className="hero-google-widget__rating">
+                    <strong>4.7</strong> <span className="hero-google-widget__stars">★★★★★</span>
+                  </span>
+                  <span className="hero-google-widget__count">37 Google Reviews</span>
+                </span>
+              </a>
+            </div>
+            <div className="hero-tourradar-widget">
+              <DeferredIframe src={tourRadarIframe} width={240} height={280} scrolling="no" title="TourRadar Reviews" />
+            </div>
           </div>
         </div>
       </section>
       <HeroEnquiryForm className="hero-enquiry--below" id="hero-enquiry" />
-      <div className="hero-review-badges">
-        <div className="hero-tripadvisor-widget">
-          <TripadvisorBadge />
-        </div>
-        <a
-          className="hero-google-widget"
-          href="https://www.google.com/maps?cid=3563717595747314560"
-          target="_blank"
-          rel="noopener"
-        >
-          <GoogleGIcon className="hero-google-widget__icon" />
-          <span className="hero-google-widget__text">
-            <span className="hero-google-widget__rating">
-              <strong>4.7</strong> <span className="hero-google-widget__stars">★★★★★</span>
-            </span>
-            <span className="hero-google-widget__count">37 Google Reviews</span>
-          </span>
-        </a>
-      </div>
     </div>
   );
 }

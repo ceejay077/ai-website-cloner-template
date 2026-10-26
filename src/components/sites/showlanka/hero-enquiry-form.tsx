@@ -43,7 +43,8 @@ export function HeroEnquiryForm({ className = "", id }: { className?: string; id
   const fieldId = (name: string) => `${uid}-${name}`;
 
   return (
-    <form id={id} className={`hero-enquiry ${className}`} aria-label="Quick enquiry" noValidate onSubmit={onSubmit}>
+    // data-lpignore: LastPass otherwise injects icon <div>s into the labels before hydration.
+    <form id={id} className={`hero-enquiry ${className}`} aria-label="Quick enquiry" noValidate onSubmit={onSubmit} data-lpignore="true">
       <p className="hero-enquiry__title">Plan your Sri Lanka trip</p>
       <div className="hero-enquiry__fields">
         <label className="hero-enquiry__field" htmlFor={fieldId("name")}>

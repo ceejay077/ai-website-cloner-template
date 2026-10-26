@@ -381,24 +381,23 @@
 }
 
 /* ---------- Hero ---------- */
+/* Everything over the slides is in normal flow (tagline, then the badge row), so the hero
+   grows to fit its content instead of letting absolutely-placed pieces collide. */
 .sl .hero-section-wrapper { position: relative; }
-@media (min-width: 992px) {
-  .sl .hero-section-wrapper { height: 100vh; }
-}
 .sl .carousel-content {
   display: flex;
   overflow: hidden;
-  height: 65vh;
-  max-height: calc(100vh - 4rem);
+  min-height: 65vh;
 }
 .sl .inner-carousel-container {
   width: 100%;
-  height: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .sl .hero-slides {
-  position: relative;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   /* owl-carousel's z-index: 1 paints the slides above the theme's dark overlays */
   z-index: 1;
 }
@@ -421,11 +420,9 @@
   max-width: none;
 }
 .sl .overlay-tagline {
-  position: absolute;
-  inset: 10% auto auto 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  z-index: 1;
+  position: relative;
+  flex: 1;
+  z-index: 2;
   text-align: center;
   color: #fff;
   display: flex;
@@ -433,7 +430,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 0 2rem;
+  padding: 2.5rem 1.25rem 1.5rem;
   font-family: "Montserrat", "Segoe UI", sans-serif;
 }
 .sl .overlay-tagline .hero-title {
@@ -493,66 +490,22 @@
   border-radius: 16px;
   line-height: 1.5;
 }
-@media (min-width: 992px) {
-  .sl .carousel-content {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-  }
-  .sl .inner-carousel-container { height: 100vh; }
-  .sl .overlay-tagline {
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
-    height: auto;
-    min-height: 180px;
-    width: min(100%, 1100px);
-  }
-}
-
-.sl .hero-tourradar-widget {
-  position: absolute;
-  left: 50%;
-  bottom: 4%;
-  z-index: 2;
-  transform: translateX(-50%) scale(0.55);
-  transform-origin: bottom center;
-}
-.sl .hero-tourradar-widget iframe {
-  display: block;
-  border: 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-  width: 240px;
-  height: 280px;
-  background: #fff;
-}
-@media (min-width: 420px) {
-  .sl .hero-tourradar-widget { bottom: 5%; transform: translateX(-50%) scale(0.68); }
-}
-@media (min-width: 768px) {
-  .sl .hero-tourradar-widget { bottom: 6%; transform: translateX(-50%) scale(0.85); }
-}
-@media (min-width: 992px) {
-  .sl .hero-tourradar-widget {
-    left: auto;
-    right: 2rem;
-    bottom: 2rem;
-    transform: none;
-    transform-origin: initial;
-  }
-}
-
-.sl .hero-review-badges {
+.sl .hero-bottom {
+  position: relative;
   z-index: 2;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 1rem 1.5rem;
+}
+.sl .hero-review-badges {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 1.5rem 1rem;
 }
 .sl .hero-review-badges .hero-tripadvisor-widget {
   line-height: 0;
@@ -561,7 +514,6 @@
   padding: 10px 14px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   flex-shrink: 0;
-  zoom: 1.2;
 }
 .sl .hero-google-widget {
   display: flex;
@@ -581,19 +533,42 @@
 .sl .hero-google-widget__rating { font-size: 0.9rem; font-weight: 700; }
 .sl .hero-google-widget__stars { color: #fbbc04; font-size: 0.75rem; letter-spacing: 1px; }
 .sl .hero-google-widget__count { font-size: 0.7rem; font-weight: 500; color: #5f6368; }
+
+/* zoom (not transform: scale) so the widget's layout box shrinks with it */
+.sl .hero-tourradar-widget { line-height: 0; zoom: 0.6; }
+.sl .hero-tourradar-widget iframe {
+  display: block;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  width: 240px;
+  height: 280px;
+  background: #fff;
+}
 @media (max-width: 420px) {
+  .sl .hero-bottom,
   .sl .hero-review-badges { gap: 0.5rem; }
-  .sl .hero-review-badges .hero-tripadvisor-widget { zoom: 1; padding: 8px 10px; }
+  .sl .hero-review-badges .hero-tripadvisor-widget { padding: 8px 10px; }
   .sl .hero-google-widget { padding: 6px 10px; }
 }
+@media (min-width: 768px) {
+  .sl .hero-tourradar-widget { zoom: 0.7; }
+}
 @media (min-width: 992px) {
-  .sl .hero-review-badges {
-    position: absolute;
-    left: 2rem;
-    bottom: 2rem;
-    justify-content: flex-start;
-    padding: 0;
+  .sl .carousel-content { min-height: 100vh; }
+  /* Clear the fixed 7rem header */
+  .sl .overlay-tagline { justify-content: center; padding: 7.5rem 2rem 1.5rem; }
+  .sl .hero-bottom {
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0 2rem 2rem;
   }
+  .sl .hero-review-badges { justify-content: flex-start; }
+  .sl .hero-review-badges .hero-tripadvisor-widget { zoom: 1.2; }
+  .sl .hero-tourradar-widget { zoom: 0.65; }
+}
+@media (min-width: 1400px) {
+  .sl .hero-tourradar-widget { zoom: 0.8; }
 }
 
 /* Hero quick-enquiry form: a card below the hero on phones/tablets, a strip under the tagline on desktop */
@@ -673,11 +648,6 @@
   }
   .sl .hero-enquiry--overlay .hero-enquiry__more,
   .sl .hero-enquiry--overlay .hero-enquiry__status { margin-top: 0.5rem; text-align: center; }
-  /* Keep the tagline + form block clear of the TourRadar widget */
-  .sl .overlay-tagline { top: 45%; }
-}
-@media (min-width: 992px) and (max-width: 1399px) {
-  .sl .hero-tourradar-widget { transform: scale(0.65); transform-origin: bottom right; }
 }
 
 /* TripAdvisor "ratings only narrow" badge, rebuilt from its rendered markup */
