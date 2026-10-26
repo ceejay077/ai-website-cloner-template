@@ -596,6 +596,90 @@
   }
 }
 
+/* Hero quick-enquiry form: a card below the hero on phones/tablets, a strip under the tagline on desktop */
+.sl .hero-enquiry {
+  margin: 1.5rem 1rem 0;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  color: #212529;
+  text-align: left;
+  font-family: "Montserrat", "Segoe UI", sans-serif;
+  scroll-margin-top: 6rem;
+}
+.sl .hero-enquiry--overlay { display: none; }
+.sl .hero-enquiry__title {
+  margin: 0 0 0.75rem;
+  color: var(--sl-blue);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sl .hero-enquiry__fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+.sl .hero-enquiry__field { display: flex; flex-direction: column; gap: 4px; margin: 0; min-width: 0; }
+.sl .hero-enquiry__field > span:first-child { font-size: 0.75rem; font-weight: 600; color: #495057; }
+.sl .hero-enquiry__field input,
+.sl .hero-enquiry__field select {
+  height: 40px;
+  width: 100%;
+  border: 1px solid #a4a3ba;
+  border-radius: 16px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: #212529;
+  background: #fff;
+}
+.sl .hero-enquiry__field select { appearance: auto; }
+.sl .hero-enquiry__field input[aria-invalid="true"] { border-color: #dc3232; }
+.sl .hero-enquiry__error { color: #dc3232; font-size: 0.75rem; }
+.sl .hero-enquiry__submit {
+  height: 40px;
+  border: 0;
+  white-space: nowrap;
+  font-family: inherit;
+  font-weight: 700;
+}
+.sl .hero-enquiry__submit:disabled { opacity: 0.7; cursor: wait; }
+.sl .hero-enquiry__more,
+.sl .hero-enquiry__status { margin: 0.75rem 0 0; font-size: 0.8rem; color: #495057; }
+.sl .hero-enquiry__more a { color: var(--sl-btn); text-decoration: underline; }
+.sl .hero-enquiry__status { color: #0f7a3d; font-weight: 600; }
+@media (min-width: 576px) {
+  .sl .hero-enquiry__fields { grid-template-columns: 1fr 1fr; }
+  .sl .hero-enquiry__submit { align-self: end; }
+}
+@media (min-width: 992px) {
+  .sl .hero-enquiry-jump,
+  .sl .hero-enquiry--below { display: none; }
+  .sl .hero-enquiry--overlay {
+    display: block;
+    width: min(100%, 960px);
+    margin: 0.5rem auto 0;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .sl .hero-enquiry--overlay .hero-enquiry__title { display: none; }
+  .sl .hero-enquiry--overlay .hero-enquiry__fields {
+    grid-template-columns: 1fr 1.25fr 1.05fr 1fr 0.55fr auto;
+    align-items: end;
+  }
+  .sl .hero-enquiry--overlay .hero-enquiry__more,
+  .sl .hero-enquiry--overlay .hero-enquiry__status { margin-top: 0.5rem; text-align: center; }
+  /* Keep the tagline + form block clear of the TourRadar widget */
+  .sl .overlay-tagline { top: 45%; }
+}
+@media (min-width: 992px) and (max-width: 1399px) {
+  .sl .hero-tourradar-widget { transform: scale(0.65); transform-origin: bottom right; }
+}
+
 /* TripAdvisor "ratings only narrow" badge, rebuilt from its rendered markup */
 .sl .ta-badge {
   display: block;

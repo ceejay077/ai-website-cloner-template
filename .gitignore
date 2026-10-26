@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Local temp files
 temp/
+
+# Admin panel database and uploaded images (runtime data, not source)
+data/
