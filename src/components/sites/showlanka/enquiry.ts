@@ -1,5 +1,5 @@
 export const ENQUIRY_EMAIL = "showlankatours@gmail.com";
-/** Everyone who gets each enquiry: the Resend team email and the mailto fallback. Netlify Forms notifications are set in the Netlify UI. */
+/** Everyone who gets each enquiry: the Resend team email and the mailto fallback. */
 export const ENQUIRY_RECIPIENTS = [ENQUIRY_EMAIL, "naveenchamara@gmail.com"];
 
 export type Enquiry = {
@@ -20,36 +20,29 @@ export type Enquiry = {
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Netlify Forms (production): emails the enquiry and keeps it in the Netlify dashboard. */
-async function postNetlifyForm(enquiry: Enquiry) {
-  const fields: Record<string, string> = { "form-name": "enquiry", subject: `Tour enquiry from ${enquiry.name}` };
-  for (const [k, v] of Object.entries(enquiry)) fields[k] = v ?? "";
-  // POST to the static skeleton: "/" would hit the Next.js server, not form processing.
-  const res = await fetch("/__forms.html", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(fields).toString(),
-  });
-  return res.ok;
-}
-
-/** /api/enquiry: saves it for the admin panel (/admin/enquiries) where a database is available. */
+/**
+ * /api/enquiry: emails the team and the visitor via Resend, and saves it for the
+ * admin panel (/admin/enquiries) where a database is available.
+ */
 async function postApi(enquiry: Enquiry) {
-  const res = await fetch("/api/enquiry", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(enquiry),
-  });
-  return res.ok;
+  try {
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(enquiry),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 /**
- * Sends the enquiry to Netlify Forms and /api/enquiry; if neither accepts it,
- * opens the visitor's mail app with the enquiry instead.
+ * Sends the enquiry to /api/enquiry; if it isn't accepted, opens the visitor's
+ * mail app with the enquiry instead.
  */
 export async function submitEnquiry(enquiry: Enquiry): Promise<"sent" | "mailto"> {
-  const results = await Promise.allSettled([postNetlifyForm(enquiry), postApi(enquiry)]);
-  if (results.some((r) => r.status === "fulfilled" && r.value)) return "sent";
+  if (await postApi(enquiry)) return "sent";
 
   const lines = [
     `Name: ${enquiry.name}`,
