@@ -1,3 +1,4 @@
+import { ENQUIRY_RECIPIENTS } from "@/components/sites/showlanka/enquiry";
 import { getDb } from "./db";
 import { ENQUIRY_STATUSES, type EnquiryStatus } from "./enquiry-statuses";
 
@@ -134,7 +135,11 @@ async function sendEmail(payload: { to: string[]; reply_to?: string; subject: st
   }
 }
 
-const teamAddresses = () => (process.env.ENQUIRY_EMAIL_TO ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+/** ENQUIRY_RECIPIENTS always get the team email; ENQUIRY_EMAIL_TO can add more. */
+const teamAddresses = () => {
+  const extra = (process.env.ENQUIRY_EMAIL_TO ?? "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+  return [...new Set([...ENQUIRY_RECIPIENTS, ...extra])];
+};
 
 /** Thank-you email to the visitor, via Resend; replies go to the team. */
 export async function sendThankYouEmail(e: EnquiryInput) {
@@ -159,10 +164,9 @@ ${messageRow(e)}
   });
 }
 
-/** Notification email to the team via Resend, when RESEND_API_KEY, ENQUIRY_EMAIL_FROM and ENQUIRY_EMAIL_TO are set. */
+/** Notification email to the team via Resend, when RESEND_API_KEY and ENQUIRY_EMAIL_FROM are set. */
 export async function sendEnquiryEmail(id: number | null, e: EnquiryInput) {
   const to = teamAddresses();
-  if (!to.length) return false;
   const mail = esc(e.email);
   const body = `${section("Contact details")}
 ${rows([

@@ -1,6 +1,6 @@
 export const ENQUIRY_EMAIL = "showlankatours@gmail.com";
-/** Everyone the mailto fallback addresses. Netlify Forms notifications are set in the Netlify UI. */
-const ENQUIRY_RECIPIENTS = [ENQUIRY_EMAIL, "naveenchamara@gmail.com"];
+/** Everyone who gets each enquiry: the Resend team email and the mailto fallback. Netlify Forms notifications are set in the Netlify UI. */
+export const ENQUIRY_RECIPIENTS = [ENQUIRY_EMAIL, "naveenchamara@gmail.com"];
 
 export type Enquiry = {
   name: string;
