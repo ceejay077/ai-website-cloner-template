@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Show Lanka Tours — Plan Your Sri Lanka Holiday With Local Travel Experts",
+  title: "Show Lanka Tours | Plan Your Sri Lanka Holiday With Local Travel Experts",
   description: "Pixel-perfect website clone",
 };
 

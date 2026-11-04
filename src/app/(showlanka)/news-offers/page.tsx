@@ -8,7 +8,7 @@ import { getNews } from "@/lib/server/content";
 
 export const metadata: Metadata = {
   title:
-    "Sri Lanka Travel News, Holiday Offers & Destination Updates — Get Local Insights, Seasonal Ideas and Practical Inspiration for Planning Your Next Island Adventure | Show Lanka Tours",
+    "Sri Lanka Travel News and Holiday Offers: Local Insights, Seasonal Ideas and Practical Tips for Your Next Island Adventure | Show Lanka Tours",
   description: "Sri Lanka tourism news and travel updates from Show Lanka Tours.",
 };
 

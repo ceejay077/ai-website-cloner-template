@@ -15,14 +15,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const tour = await getTour(slug);
   if (tour) {
     return {
-      title: `${tour.title} in Sri Lanka — Explore the Route, Discover the Highlights, and Plan Your Holiday With Local Travel Support | Show Lanka Tours`,
+      title: `${tour.title} in Sri Lanka: Explore the Route, Discover the Highlights and Plan Your Holiday With Local Travel Support | Show Lanka Tours`,
       description: tourIntro(tour),
     };
   }
   const item = await getNewsItem(slug);
   if (item) {
     return {
-      title: `Sri Lanka Travel News: ${item.title} — Destination Updates, Holiday Ideas and Local Insights for Planning Your Island Trip | Show Lanka Tours`,
+      title: `Sri Lanka Travel News: ${item.title}. Find Destination Updates, Holiday Ideas and Local Insights for Planning Your Island Trip | Show Lanka Tours`,
       description: item.summary[0],
     };
   }
