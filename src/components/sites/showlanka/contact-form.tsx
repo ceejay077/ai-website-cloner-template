@@ -135,7 +135,17 @@ export function ContactForm() {
   );
 
   return (
-    <form className="wpcf7-form" aria-label="Contact form" noValidate onSubmit={onSubmit}>
+    <form
+      name="showlanka-enquiry"
+      method="post"
+      data-netlify="true"
+      netlify-honeypot="website"
+      className="wpcf7-form"
+      aria-label="Contact form"
+      noValidate
+      onSubmit={onSubmit}
+    >
+      <input type="hidden" name="form-name" value="showlanka-enquiry" />
       {field("name*", "your-name", "text", errors.name)}
       {field("email*", "your-email", "email", errors.email)}
       {field("telephone", "tel", "tel")}

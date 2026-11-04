@@ -1,6 +1,7 @@
 export const ENQUIRY_EMAIL = "showlankatours@gmail.com";
 /** Everyone who gets each enquiry: the Resend team email and the mailto fallback. */
 export const ENQUIRY_RECIPIENTS = [ENQUIRY_EMAIL, "naveenchamara@gmail.com"];
+const NETLIFY_FORM_NAME = "showlanka-enquiry";
 
 export type Enquiry = {
   name: string;
@@ -59,6 +60,20 @@ async function postApi(enquiry: Enquiry) {
   } catch {
     return false;
   }
+}
+
+async function postNetlifyForm(enquiry: Enquiry) {
+  const body = new URLSearchParams({ "form-name": NETLIFY_FORM_NAME });
+  for (const [key, value] of Object.entries(enquiry)) {
+    if (value !== undefined) body.set(key, value);
+  }
+
+  const response = await fetch("/__forms.html", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+  return response.ok;
 }
 
 /**
