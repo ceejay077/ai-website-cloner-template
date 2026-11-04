@@ -7,7 +7,8 @@ import { SubPageHero } from "@/components/sites/showlanka/subpage-parts";
 import { getNews } from "@/lib/server/content";
 
 export const metadata: Metadata = {
-  title: "Budget tour operators - Latest Sri Lanka Tourism News",
+  title:
+    "Sri Lanka Travel News, Holiday Offers & Destination Updates — Get Local Insights, Seasonal Ideas and Practical Inspiration for Planning Your Next Island Adventure | Show Lanka Tours",
   description: "Sri Lanka tourism news and travel updates from Show Lanka Tours.",
 };
 

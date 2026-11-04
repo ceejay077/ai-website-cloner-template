@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { contactPage } from "./content/pages";
 import { DatePicker } from "./date-picker";
@@ -11,6 +12,7 @@ type Errors = Partial<Record<"name" | "email" | "departure", string>>;
  * Contact Form 7 layout from /contact. Submitted through submitEnquiry().
  */
 export function ContactForm() {
+  const router = useRouter();
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -64,6 +66,7 @@ export function ContactForm() {
       form.reset();
       setArrival("");
       setDeparture("");
+      router.push("/thank-you");
     }
     setStatus(result);
   };

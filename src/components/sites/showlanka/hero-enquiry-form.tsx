@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useId, useState, type FormEvent } from "react";
 import { EMAIL_RE, ENQUIRY_EMAIL, submitEnquiry } from "./enquiry";
 
@@ -8,6 +9,7 @@ type Errors = Partial<Record<"name" | "email", string>>;
 
 /** Short enquiry form for the home hero; the full form lives on /contact. */
 export function HeroEnquiryForm({ className = "", id }: { className?: string; id?: string }) {
+  const router = useRouter();
   const uid = useId();
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"" | "sending" | "sent" | "mailto">("");
@@ -36,7 +38,10 @@ export function HeroEnquiryForm({ className = "", id }: { className?: string; id
       page: window.location.pathname,
       website: get("website"),
     });
-    if (result === "sent") form.reset();
+    if (result === "sent") {
+      form.reset();
+      router.push("/thank-you");
+    }
     setStatus(result);
   };
 

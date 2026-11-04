@@ -19,6 +19,30 @@ export type Enquiry = {
 };
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PENDING_PURCHASE_CONVERSION_KEY = "showlanka:pending-purchase-conversion";
+
+declare global {
+  interface Window {
+    gtag?: (command: string, eventName: string, parameters?: Record<string, string>) => void;
+  }
+}
+
+export function firePendingPurchaseConversion() {
+  if (typeof window.gtag !== "function") return;
+
+  try {
+    if (window.sessionStorage.getItem(PENDING_PURCHASE_CONVERSION_KEY) !== "1") return;
+    window.sessionStorage.removeItem(PENDING_PURCHASE_CONVERSION_KEY);
+  } catch (error) {
+    console.error("[analytics] Unable to read the pending purchase conversion:", error);
+    return;
+  }
+
+  window.gtag("event", "conversion", {
+    send_to: "AW-16666466013/Mk4wCOG47pkdEN2tmIs-",
+    transaction_id: "",
+  });
+}
 
 /** Netlify Forms (production): emails the enquiry and keeps it in the Netlify dashboard. */
 async function postNetlifyForm(enquiry: Enquiry) {
@@ -49,7 +73,15 @@ async function postApi(enquiry: Enquiry) {
  */
 export async function submitEnquiry(enquiry: Enquiry): Promise<"sent" | "mailto"> {
   const results = await Promise.allSettled([postNetlifyForm(enquiry), postApi(enquiry)]);
-  if (results.some((r) => r.status === "fulfilled" && r.value)) return "sent";
+  if (results.some((r) => r.status === "fulfilled" && r.value)) {
+    window.gtag?.("event", "ads_conversion_Form_1");
+    try {
+      window.sessionStorage.setItem(PENDING_PURCHASE_CONVERSION_KEY, "1");
+    } catch (error) {
+      console.error("[analytics] Unable to mark the pending purchase conversion:", error);
+    }
+    return "sent";
+  }
 
   const lines = [
     `Name: ${enquiry.name}`,

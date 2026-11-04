@@ -5,7 +5,8 @@
 export type Hero = { image: string; alt: string; title?: string; subtitle?: string };
 
 export const toursPage = {
-  seoTitle: "Explore Sri Lanka with Show Lanka Tours - Sri Lanka tour operators | Show Lanka tours",
+  seoTitle:
+    "Custom Sri Lanka Tour Packages for Couples, Families & Small Groups — Private Guided Holidays, Wildlife Safaris, Cultural Routes, Beaches and Tailor-Made Itineraries | Show Lanka Tours",
   description:
     "Discover Sri Lanka's top destinations with Show Lanka Tours. Custom tour packages featuring cultural, adventure, and wildlife experiences.",
   hero: {
@@ -65,7 +66,8 @@ export const coupons = [
 ];
 
 export const bonanzaPage = {
-  seoTitle: "Sweet Bonanza - Sri Lanka tour operators | Show Lanka tours",
+  seoTitle:
+    "Sri Lanka Holiday Deals & Sweet Bonanza Travel Coupons — Discover Special Offers, Save on Selected Experiences and Make Your Island Trip Even More Memorable | Show Lanka Tours",
   description:
     "Unlock amazing travel experiences with our exclusive Sweet Bonanza coupon! These special offers are designed to make your dream vacation more affordable and unforgettable. Don't miss out—redeem your Sweet Bonanza coupon today and start your journey to extraordinary destinations!",
   hero: { image: "2024/05/Lotus_tower-scaled.jpg", alt: "Lotus tower Sri Lanka" } satisfies Hero,
@@ -75,7 +77,8 @@ export const bonanzaPage = {
 };
 
 export const aboutPage = {
-  seoTitle: "Show Lanka Tours: Crafting Unforgettable Journeys in Sri Lanka",
+  seoTitle:
+    "About Show Lanka Tours — A Locally Owned Sri Lanka Tour Operator Since 2002, Creating Personalised Private Holidays, Small-Group Adventures and Responsible Travel Experiences Across the Island",
   description: "About Show Lanka Tours, a local Sri Lanka tour operator founded in 2002.",
   hero: {
     image: "2024/07/difference_20between_20mission_20and_20vision.webp",
@@ -131,7 +134,8 @@ export const teamIntro =
   "A tour coordinator will get in touch soon after you send a request. For anything urgent, message us on WhatsApp at +94 77 914 4664.";
 
 export const gurusPage = {
-  seoTitle: "Meet the Show Lanka Tours Team - Your Travel Experts",
+  seoTitle:
+    "Meet Your Sri Lanka Travel Experts — Experienced English-Speaking Chauffeur Guides, Local Tour Consultants and On-Trip Support for Safe, Personalised Island Journeys | Show Lanka Tours",
   description: "Meet the Show Lanka Tours ground support team and chauffeur guides.",
   hero: {
     image: "2024/06/239062_639cd2783b15c.jpg",
@@ -179,7 +183,8 @@ export const guides = [
 ];
 
 export const storiesPage = {
-  seoTitle: "Real Traveler Reviews and Testimonials | Sri Lanka tour guides",
+  seoTitle:
+    "Real Sri Lanka Travel Stories & Guest Reviews — Watch Video Testimonials From Travellers Who Explored the Island With Local Guides, Private Tours and Tailor-Made Holidays | Show Lanka Tours",
   description: "Video stories from travellers who toured Sri Lanka with Show Lanka Tours.",
   hero: { image: "2024/08/Yala.jpg", alt: "Leopard family in Yala" } satisfies Hero,
   heading: "Sri Lanka Travel Stories & Real Experiences",
@@ -200,7 +205,8 @@ export const storiesPage = {
 };
 
 export const faqPage = {
-  seoTitle: "Show Lanka Tours - Frequently Asked Questions (FAQ)",
+  seoTitle:
+    "Sri Lanka Tour FAQs — Airport Transfers, Private Chauffeur Guides, Itinerary Changes, Accommodation, Payments, Cancellations and Practical Travel Advice | Show Lanka Tours",
   description: "Answers to common questions about travelling in Sri Lanka with Show Lanka Tours.",
   hero: { image: "2024/05/arugambay.jpg", alt: "Arugambay beach Sri Lanka" } satisfies Hero,
   faqs: [
@@ -229,7 +235,8 @@ export const faqPage = {
 };
 
 export const termsPage = {
-  seoTitle: "Terms and conditions - Sri Lanka tour operators | Show Lanka tours",
+  seoTitle:
+    "Sri Lanka Tour Booking Terms & Conditions — Payment Schedules, Reservations, Cancellation Fees, Refunds, Accommodation Changes, Private Holidays and Group Tour Policies | Show Lanka Tours",
   description: "Booking, payment, cancellation and refund terms for Show Lanka Tours.",
   hero: { image: "2024/06/beach-5812300_1920.jpg", alt: "Sri Lanka beach" } satisfies Hero,
   note: "Summary of the terms. The binding wording is published on showlanka.com.",
@@ -308,7 +315,8 @@ export const termsPage = {
 };
 
 export const contactPage = {
-  seoTitle: "Contact Show Lanka Tours - Your Trusted Sri Lanka Tour Operator",
+  seoTitle:
+    "Contact Show Lanka Tours to Plan Your Sri Lanka Holiday — Request a Custom Tour Quote, Speak With Local Travel Experts, Arrange Private Guides and Get Help With Your Itinerary",
   description: "Get in touch with Show Lanka Tours to plan your Sri Lanka trip.",
   hero: {
     image: "2024/06/beach-5812300_1920.jpg",
