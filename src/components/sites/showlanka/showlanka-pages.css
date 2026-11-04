@@ -39,24 +39,27 @@
 
 /* ---------- Sub-page hero ---------- */
 /* The source only loads the homepage hero rules on "/", so sub-page heroes size to the image. */
+/* Fixed height with a covering image, so narrow screens don't show the base .carousel-content
+   min-height as an empty band below a short, wide image. */
 .sl .carousel-content.sub-page {
   position: relative;
-  height: auto;
-  max-height: 60vh;
+  height: 60vh;
+  min-height: 0;
   overflow: hidden;
 }
 .sl .carousel-content.sub-page > img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: fit-content;
+  height: 100%;
   max-width: none;
+  object-fit: cover;
   display: block;
 }
 @media (min-width: 992px) {
   .sl .carousel-content.sub-page {
-    position: relative;
     width: auto;
-    height: auto;
-    max-height: 70vh;
+    height: 70vh;
   }
 }
 .sl .carousel-content.sub-page .sub-page-hero-overlay {
@@ -657,7 +660,36 @@
 .sl .wpcf7-form .children-wrapper { display: flex; flex-direction: column; }
 .sl .wpcf7-form .children-wrapper .label { font-weight: 600; }
 .sl .wpcf7-form .childAgeWrap { display: flex; flex-direction: column; }
-.sl .wpcf7-form .childAgeWrap input { margin: 0 0 8px; }
+.sl .wpcf7-form .childAgeWrap .count-input { margin: 0 0 8px; }
+.sl .wpcf7-form .count-input { position: relative; display: block; }
+.sl .wpcf7-form p .count-input input { padding-right: 44px; appearance: textfield; -moz-appearance: textfield; }
+.sl .wpcf7-form .count-input input::-webkit-outer-spin-button,
+.sl .wpcf7-form .count-input input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.sl .wpcf7-form .count-input input[aria-invalid="true"] { border-color: #dc3232; }
+.sl .wpcf7-form .count-input__buttons {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sl .wpcf7-form .count-input__buttons button {
+  flex: 1;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #e8f2fc;
+  color: var(--sl-btn);
+  cursor: pointer;
+}
+.sl .wpcf7-form .count-input__buttons button:hover:not(:disabled) { background: var(--sl-btn); color: #fff; }
+.sl .wpcf7-form .count-input__buttons button:disabled { color: #b8c2cc; background: #f2f4f6; cursor: default; }
 .sl .wpcf7-form .wpcf7-submit {
   background: var(--sl-btn);
   padding: 8px 32px;

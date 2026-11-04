@@ -6,8 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Admin panel, API endpoints and the Netlify Forms detection page are not for search.
-      disallow: ["/admin", "/api/", "/__forms.html"],
+      // Admin panel and API endpoints are not for search.
+      disallow: ["/admin", "/api/"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
